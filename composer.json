@@ -1,5 +1,5 @@
 {
-    "name": "fxp/swiftmailer-doctrine-bundle",
+    "name": "arnaudschaeffer/swiftmailer-doctrine-bundle",
     "type": "symfony-bundle",
     "description": "Doctrine spool for Swiftmailer",
     "keywords": ["swiftmailer", "spool", "doctrine"],
@@ -18,7 +18,7 @@
         "symfony/framework-bundle": "^4.1.0",
         "symfony/console": "^4.1.0",
         "symfony/swiftmailer-bundle": "^3.2.0",
-        "fxp/swiftmailer-doctrine": "^1.0.0"
+        "arnaudschaeffer/swiftmailer-doctrine": "@dev"
     },
     "require-dev": {
         "doctrine/doctrine-bundle": "^1.9.0"
