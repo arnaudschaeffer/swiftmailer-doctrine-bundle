@@ -1,0 +1,114 @@
+Getting Started
+===============
+
+## Prerequisites
+
+This version of the bundle requires Symfony 3, and configuring of the Swiftmailer bundle should
+be performed (see the [doc](http://symfony.com/doc/current/cookbook/email/email.html), if this isn't the case).
+
+## Installation
+
+Installation is a quick, 6 step process:
+
+1. Download the bundle using composer
+2. Enable the bundle
+3. Create your SpoolEmail class
+4. Configure your application's config.yml
+5. Update your database schema
+6. Configure the bundle
+
+### Step 1: Download the bundle using composer
+
+Tell composer to download the bundle by running the command:
+
+```bash
+$ composer require fxp/swiftmailer-doctrine-bundle
+```
+
+Composer will install the bundle to your project's `vendor/fxp` directory.
+
+### Step 2: Enable the bundle
+
+Enable the bundle in the kernel:
+
+```php
+// app/AppKernel.php
+
+public function registerBundles()
+{
+    $bundles = array(
+        // ...
+        new Fxp\Bundle\SwiftmailerDoctrineBundle\FxpSwiftmailerDoctrineBundle(),
+    );
+}
+```
+
+### Step 3: Create your SpoolEmail class
+
+#### Create the SpoolEmail class
+
+``` php
+// src/Acme/CoreBundle/Entity/SpoolEmail.php
+
+namespace Acme\CoreBundle\Entity;
+
+use Fxp\Component\SwiftmailerDoctrine\Model\SpoolEmail as BaseSpoolEmail;
+
+class SpoolEmail extends BaseSpoolEmail
+{
+}
+```
+
+#### Create the SpoolEmail mapping
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  http://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
+
+    <entity name="Acme\CoreBundle\Entity\SpoolEmail" table="core_spool_email">
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO"/>
+        </id>
+    </entity>
+</doctrine-mapping>
+```
+
+### Step 4: Configure your application's config.yml
+
+Add the following configuration to your `config.yml`.
+
+```yaml
+# app/config/config.yml
+fxp_swiftmailer_doctrine:
+    spool_email_class:  Acme\CoreBundle\Entity\SpoolEmail
+
+swiftmailer:
+    spool:
+        type: fxp_doctrine_orm_spool
+```
+
+### Step 5: Update your database schema
+
+```bash
+$ php app/console doctrine:schema:update --force
+```
+
+### Step 6: Configure the bundle
+
+You can override the default configuration adding `fxp_swiftmailer_doctrine` tree in `app/config/config.yml`.
+For see the reference of Fxp Resource Configuration, execute command:
+
+```bash
+$ php app/console config:dump-reference FxpSwiftmailerDoctrineBundle
+```
+
+### Next Steps
+
+Now that you have completed the basic installation and configuration of the
+Fxp SwiftmailerDoctrineBundle, you are ready to learn about usages of the bundle.
+
+You can now use the `mailer` service to send emails in the Doctrine Spool, and use the
+command `swiftmailer:spool:send` to send emails to recipients.

@@ -1,0 +1,37 @@
+{
+    "name": "fxp/swiftmailer-doctrine-bundle",
+    "type": "symfony-bundle",
+    "description": "Doctrine spool for Swiftmailer",
+    "keywords": ["swiftmailer", "spool", "doctrine"],
+    "homepage": "https://github.com/fxpio/fxp-swiftmailer-doctrine-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "François Pluchino",
+            "email": "francois.pluchino@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "php": "^7.1.0",
+        "symfony/framework-bundle": "^4.1.0",
+        "symfony/console": "^4.1.0",
+        "symfony/swiftmailer-bundle": "^3.2.0",
+        "fxp/swiftmailer-doctrine": "^1.0.0"
+    },
+    "require-dev": {
+        "doctrine/doctrine-bundle": "^1.9.0"
+    },
+    "autoload": {
+        "psr-4": { "Fxp\\Bundle\\SwiftmailerDoctrineBundle\\": "" },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}
