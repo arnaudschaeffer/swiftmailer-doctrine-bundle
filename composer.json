@@ -21,7 +21,7 @@
         "arnaudschaeffer/swiftmailer-doctrine": "@dev"
     },
     "require-dev": {
-        "doctrine/doctrine-bundle": "^1.9.0"
+        "doctrine/doctrine-bundle": "^1.9.0 || ^2.6"
     },
     "autoload": {
         "psr-4": { "Fxp\\Bundle\\SwiftmailerDoctrineBundle\\": "" },
