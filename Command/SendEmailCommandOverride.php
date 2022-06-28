@@ -26,7 +26,7 @@ class SendEmailCommandOverride extends SendEmailCommand
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $name = $input->getOption('mailer');
         if ($name) {
