@@ -29,14 +29,21 @@ class SendEmailCommandOverride extends SendEmailCommand
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $name = $input->getOption('mailer');
-        if ($name) {
-            $this->processDoctrineMailer($name, $input, $output);
-        } else {
-            $mailers = array_keys($this->getContainer()->getParameter('swiftmailer.mailers'));
-            foreach ($mailers as $name) {
-                $this->processDoctrineMailer($name, $input, $output);
+        $sent = 0;
+        try {
+            if ($name) {
+                $sent = $this->processDoctrineMailer($name, $input, $output);
+            } else {
+                $mailers = array_keys($this->getContainer()->getParameter('swiftmailer.mailers'));
+                foreach ($mailers as $name) {
+                    $sent += $this->processDoctrineMailer($name, $input, $output);
+                }
             }
+        } catch (\Exception $e) {
+            return 1;
         }
+
+        return 0;
     }
 
     /**
@@ -46,7 +53,7 @@ class SendEmailCommandOverride extends SendEmailCommand
      * @param InputInterface  $input  The input
      * @param OutputInterface $output The output
      */
-    private function processDoctrineMailer($name, InputInterface $input, OutputInterface $output)
+    private function processDoctrineMailer($name, InputInterface $input, OutputInterface $output): int
     {
         if (!$this->getContainer()->has(sprintf('swiftmailer.mailer.%s', $name))) {
             throw new \InvalidArgumentException(sprintf('The mailer "%s" does not exist.', $name));
@@ -60,11 +67,13 @@ class SendEmailCommandOverride extends SendEmailCommand
             $transport = $mailer->getTransport();
 
             if ($transport instanceof \Swift_Transport_SpoolTransport) {
-                $this->flushQueue($name, $transport, $input, $output);
+                return $this->flushQueue($name, $transport, $input, $output);
             }
         } else {
             $output->writeln('No email to send as the spool is disabled.');
         }
+
+        return 0;
     }
 
     /**
@@ -74,7 +83,7 @@ class SendEmailCommandOverride extends SendEmailCommand
      * @param OutputInterface                 $output    The output
      */
     private function flushQueue($name, \Swift_Transport_SpoolTransport $transport, InputInterface $input,
-                                OutputInterface $output)
+                                OutputInterface $output): int
     {
         $spool = $transport->getSpool();
 
@@ -96,5 +105,7 @@ class SendEmailCommandOverride extends SendEmailCommand
         $sent = $spool->flushQueue($realTransport);
 
         $output->writeln(sprintf('<comment>%d</comment> emails sent', $sent));
+
+        return $sent;
     }
 }
